@@ -129,7 +129,7 @@ startup
             Tuple.Create("swordskip", new List<Tuple<string, int>> { Tuple.Create("mapRef", 0x260d) }),
 			
 			// Split after screen transition of SnowMan skip
-            Tuple.Create("snowskip", new List<Tuple<string, int>> { Tuple.Create("oldMapRef", 0x7101), Tuple.Create("mapRef", 0x7201) }),
+            Tuple.Create("snowskip", new List<Tuple<string, int>> { Tuple.Create("oldMapRef", 0x7101), Tuple.Create("oldMapRef", 0x7181), Tuple.Create("mapRef", 0x7201) }),
 			
 			// Split on screen transition before julius speech
 			Tuple.Create("aegis", new List<Tuple<string, int>> { Tuple.Create("oldMapRef", 0x510f), Tuple.Create("mapRef", 0x500f)}),
@@ -231,35 +231,48 @@ split
         {
 			var count = 0;
 			
-			if (_split.Item1 == "blizzard") {
-				foreach (var _condition in _split.Item2)
-				{
-					if (vars.watchers[_condition.Item1].Current == _condition.Item2)
-						count++;
-				}
-				
-				if (count >= 1)
-				{
-					print("[Autosplitter] Split: " + _split.Item1);
-					vars.splits.Remove(_split);
-					return true;
-				}
-			} else {
-				foreach (var _condition in _split.Item2)
-				{
-					if (vars.watchers[_condition.Item1].Current == _condition.Item2)
-						count++;
-				}
-				
-				if (count == _split.Item2.Count)
-				{
-					print("[Autosplitter] Split: " + _split.Item1);
-					vars.splits.Remove(_split);
-					return true;
-				}
+			switch (_split.Item1)
+			{
+				case "blizzard":
+					foreach (var _condition in _split.Item2)
+					{
+						if (vars.watchers[_condition.Item1].Current == _condition.Item2)
+							count++;
+					}
+
+					if (count >= 1)
+					{
+						print("[Autosplitter] Split: " + _split.Item1);
+						vars.splits.Remove(_split);
+						return true;
+					}
+				case "snowskip":
+					foreach (var _condition in _split.Item2)
+					{
+						if (vars.watchers[_condition.Item1].Current == _condition.Item2)
+							count++;
+					}
+
+					if (count = 2)
+					{
+						print("[Autosplitter] Split: " + _split.Item1);
+						vars.splits.Remove(_split);
+						return true;
+					}
+				default:
+					foreach (var _condition in _split.Item2)
+					{
+						if (vars.watchers[_condition.Item1].Current == _condition.Item2)
+							count++;
+					}
+					
+					if (count == _split.Item2.Count)
+					{
+						print("[Autosplitter] Split: " + _split.Item1);
+						vars.splits.Remove(_split);
+						return true;
+					}
 			}
-		
-			
 		}
     }
 }
