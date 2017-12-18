@@ -227,13 +227,10 @@ split
 {
     foreach (var _split in vars.splits)
     {
-        if (settings[_split.Item1])
-        {
+        if (settings[_split.Item1]) {
 			var count = 0;
 			
-			switch (_split.Item1)
-			{
-				case "blizzard":
+			if (_split.Item1 == "blizzard") {
 					foreach (var _condition in _split.Item2)
 					{
 						if (vars.watchers[_condition.Item1].Current == _condition.Item2)
@@ -246,20 +243,21 @@ split
 						vars.splits.Remove(_split);
 						return true;
 					}
-				case "snowskip":
+			} else {
+				if (_split.Item1 == "snowskip") {
 					foreach (var _condition in _split.Item2)
 					{
 						if (vars.watchers[_condition.Item1].Current == _condition.Item2)
 							count++;
 					}
 
-					if (count = 2)
+					if (count == 2)
 					{
 						print("[Autosplitter] Split: " + _split.Item1);
 						vars.splits.Remove(_split);
 						return true;
 					}
-				default:
+				} else {
 					foreach (var _condition in _split.Item2)
 					{
 						if (vars.watchers[_condition.Item1].Current == _condition.Item2)
@@ -272,6 +270,7 @@ split
 						vars.splits.Remove(_split);
 						return true;
 					}
+				}
 			}
 		}
     }
